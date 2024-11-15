@@ -17,25 +17,43 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: radial-gradient(circle at bottom, #191970, #2c3e50);
             font-family: 'Georgia', serif;
             color: #ffd1dc;
             overflow-y: auto;
             position: relative;
+            transition: background 1s ease, color 1s ease;
         }
 
-        /* Moon and Star Styling */
-        .moon {
+        /* Day and Night Mode */
+        body.day {
+            background: linear-gradient(to bottom, #87CEEB, #2c3e50); /* Day Sky */
+        }
+
+        body.night {
+            background: radial-gradient(circle at bottom, #191970, #2c3e50); /* Night Sky */
+        }
+
+        /* Sun and Moon Styling */
+        .sun, .moon {
             position: absolute;
             top: 10%;
             left: 50%;
             transform: translateX(-50%);
             width: 150px;
             height: 150px;
-            background: radial-gradient(circle, #ffffff, #e6e6e6 70%);
             border-radius: 50%;
             box-shadow: 0 0 80px rgba(255, 255, 255, 0.7);
+        }
+
+        .sun {
+            background: radial-gradient(circle, #ffdd00, #e6e600 70%);
             animation: pulse 6s ease-in-out infinite;
+        }
+
+        .moon {
+            background: radial-gradient(circle, #ffffff, #e6e6e6 70%);
+            animation: pulse 6s ease-in-out infinite;
+            display: none;
         }
 
         @keyframes pulse {
@@ -43,6 +61,7 @@
             50% { transform: translate(-50%, -50%) scale(1.05); }
         }
 
+        /* Star Styling */
         .star {
             position: absolute;
             width: 3px;
@@ -150,8 +169,11 @@
     </style>
 </head>
 <body>
-    <!-- Moon and Stars -->
-    <div class="moon"></div>
+    <!-- Sun and Moon -->
+    <div class="sun" id="sun"></div>
+    <div class="moon" id="moon"></div>
+
+    <!-- Stars -->
     <div class="star"></div>
     <div class="star"></div>
     <div class="star"></div>
@@ -186,6 +208,31 @@
                 playText.textContent = "I LOVE YOU MAHU ❤️";
             }
         }
+
+        // Adjust body class based on the user's local time
+        function adjustForTime() {
+            const date = new Date();
+            const hours = date.getHours();
+
+            const body = document.body;
+            const sun = document.getElementById("sun");
+            const moon = document.getElementById("moon");
+
+            if (hours >= 6 && hours < 18) {
+                body.classList.add("day");
+                body.classList.remove("night");
+                sun.style.display = "block";
+                moon.style.display = "none";
+            } else {
+                body.classList.add("night");
+                body.classList.remove("day");
+                sun.style.display = "none";
+                moon.style.display = "block";
+            }
+        }
+
+        // Call the function on load
+        window.onload = adjustForTime;
     </script>
 </body>
 </html>
