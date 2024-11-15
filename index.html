@@ -1,88 +1,191 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sad Poem for Mahu</title>
+    <title>প্রিয়তমা চাঁদ</title>
     <style>
-        /* Original styling retained */
+        /* General Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            height: 100vh;
-            background: linear-gradient(to bottom, #1e1e2f, #3e3e5a);
-            color: #ffffff;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at bottom, #191970, #2c3e50);
             font-family: 'Georgia', serif;
-            overflow: hidden;
-        }
-
-        #poem {
-            max-width: 500px;
-            margin: 20px;
-            padding: 20px;
-            text-align: center;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            font-size: 1.2em;
             color: #ffd1dc;
+            overflow-y: auto;
+            position: relative;
         }
 
-        #playButton {
-            padding: 15px 30px;
-            font-size: 1.2em;
-            color: #ffffff;
-            background-color: #ff6b6b;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        #playButton:active {
-            transform: scale(0.95);
-        }
-
+        /* Moon and Star Styling */
         .moon {
             position: absolute;
             top: 10%;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, #ffffff, #d9d9d9 50%);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #ffffff, #e6e6e6 70%);
             border-radius: 50%;
-            box-shadow: 0 0 60px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 80px rgba(255, 255, 255, 0.7);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #ffffff;
+            animation: twinkle 3s infinite ease-in-out alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* Random Star Positions */
+        .star:nth-child(1) { top: 15%; left: 25%; animation-delay: 0s; }
+        .star:nth-child(2) { top: 40%; left: 80%; animation-delay: 1.5s; }
+        .star:nth-child(3) { top: 70%; left: 50%; animation-delay: 1s; }
+        .star:nth-child(4) { top: 30%; left: 10%; animation-delay: 2s; }
+        .star:nth-child(5) { top: 50%; left: 60%; animation-delay: 0.5s; }
+
+        /* Poem Container Styling */
+        .poem-container {
+            position: relative;
+            max-width: 600px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffd1dc;
+            text-align: center;
+            font-size: 1.4rem;
+            line-height: 1.8;
+            border-radius: 15px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            animation: fadeIn 2s ease;
+        }
+
+        .poem-line {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeLine 1s forwards;
+        }
+
+        .poem-line:nth-child(even) { animation-delay: 0.3s; }
+        .poem-line:nth-child(odd) { animation-delay: 0.6s; }
+
+        @keyframes fadeLine {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Play Text Styling */
+        .play-text {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffd1dc;
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.5s ease;
+        }
+
+        .play-text::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 0;
+            border-top: 2px solid #ffd1dc;
+            top: 100%;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease, height 0.5s ease;
+        }
+
+        .play-text:hover {
+            color: #ffb3c1;
+        }
+
+        .play-text:hover::before {
+            opacity: 1;
+            height: 100%;
+        }
+
+        /* Text After Click */
+        .play-text.clicked {
+            color: #ffb3c1;
+            font-size: 1.8rem;
+            animation: heartbeat 1s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
     </style>
 </head>
 <body>
-
-    <!-- Moon and poem elements -->
+    <!-- Moon and Stars -->
     <div class="moon"></div>
-    <div id="poem">
-        "প্রিয়তমা, দূরত্ব আমাদের ভালোবাসা মুছে দিতে পারে না,<br>
-        তবুও তোমার অভাব হৃদয়ে শূন্যতা সৃষ্টি করে।<br>
-        প্রতিটি রাত তোমার জন্য অপেক্ষা করে,<br>
-        প্রতিটি সকাল তোমার সাথে থাকার স্বপ্ন দেখে।<br>
-        ভালোবাসার এই শূন্যতায় আমি শুধু তোমার প্রতীক্ষায়।"
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+
+    <!-- Poem Container -->
+    <div class="poem-container" id="poem">
+        <div class="poem-line">"প্রিয়তমা, দূরত্ব আমাদের ভালোবাসা মুছে দিতে পারে না,</div>
+        <div class="poem-line">তবুও তোমার অভাব হৃদয়ে শূন্যতা সৃষ্টি করে।</div>
+        <div class="poem-line">প্রতিটি রাত তোমার জন্য অপেক্ষা করে,</div>
+        <div class="poem-line">প্রতিটি সকাল তোমার সাথে থাকার স্বপ্ন দেখে।</div>
+        <div class="poem-line">ভালোবাসার এই শূন্যতায় আমি শুধু তোমার প্রতীক্ষায়।"</div>
     </div>
 
-    <!-- Play button -->
-    <button id="playButton">Play Song</button>
+    <!-- Play Text Element Below Poem -->
+    <div class="play-text" onclick="playMusic()" id="playText">
+        Play Song
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="backgroundMusic" src="11.mp3"></audio>
 
     <script>
-        document.getElementById("playButton").onclick = function() {
-            // Change button text after it's clicked
-            this.textContent = "I LOVE YOU MAHU ❤️";
+        function playMusic() {
+            const audio = document.getElementById("backgroundMusic");
+            const playText = document.getElementById("playText");
 
-            // Play the song
-            const audio = new Audio("11.mp3");
-            audio.play().catch(error => {
-                console.error("Error playing audio:", error);
-            });
+            if (audio.paused) {
+                audio.play();
+                playText.classList.add("clicked");
+                playText.textContent = "I LOVE YOU MAHU ❤️";
+            }
         }
     </script>
-
 </body>
 </html>
